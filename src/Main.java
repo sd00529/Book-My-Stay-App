@@ -1,31 +1,40 @@
 /**
- * MAIN CLASS - UseCase4RoomSearch
+ * MAIN CLASS - UseCase5BookingRequestQueue
  *
- * Use Case 4: Room Search & Availability Check
+ * Use Case 5: Booking Request (FIFO)
  *
- * @version 4.0
+ * @version 5.0
  */
 public class Main {
 
     public static void main(String[] args) {
 
-        // Create room objects
-        Room singleRoom = new SingleRoom();
-        Room doubleRoom = new DoubleRoom();
-        Room suiteRoom = new SuiteRoom();
+        System.out.println("Booking Request Queue\n");
 
-        // Create inventory (from UC3)
-        RoomInventory inventory = new RoomInventory();
+        // Create queue
+        BookingRequestQueue bookingQueue = new BookingRequestQueue();
 
-        // Create search service
-        RoomSearchService searchService = new RoomSearchService();
+        // Create reservations
+        Reservation r1 = new Reservation("Abhi", "Single");
+        Reservation r2 = new Reservation("Subha", "Double");
+        Reservation r3 = new Reservation("Vanmathi", "Suite");
 
-        // Perform search (READ-ONLY)
-        searchService.searchAvailableRooms(
-                inventory,
-                singleRoom,
-                doubleRoom,
-                suiteRoom
-        );
+        // Add to queue
+        bookingQueue.addRequest(r1);
+        bookingQueue.addRequest(r2);
+        bookingQueue.addRequest(r3);
+
+        // Process requests (FIFO)
+        while (bookingQueue.hasPendingRequests()) {
+
+            Reservation current = bookingQueue.getNextRequest();
+
+            System.out.println(
+                    "Processing booking for Guest: " +
+                            current.getGuestName() +
+                            ", Room Type: " +
+                            current.getRoomType()
+            );
+        }
     }
 }
