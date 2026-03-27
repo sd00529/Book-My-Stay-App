@@ -1,42 +1,31 @@
 /**
- * MAIN CLASS - UseCase3InventorySetup
+ * MAIN CLASS - UseCase4RoomSearch
  *
- * Use Case 3: Centralized Room Inventory Management
+ * Use Case 4: Room Search & Availability Check
  *
- * @version 3.1
+ * @version 4.0
  */
 public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println("Hotel Room Inventory Status\n");
-
-        // Create room objects (from UC2)
+        // Create room objects
         Room singleRoom = new SingleRoom();
         Room doubleRoom = new DoubleRoom();
         Room suiteRoom = new SuiteRoom();
 
-        // Create inventory
+        // Create inventory (from UC3)
         RoomInventory inventory = new RoomInventory();
 
-        // Display Single Room
-        System.out.println("Single Room:");
-        singleRoom.displayRoomDetails();
-        System.out.println("Available Rooms: " +
-                inventory.getRoomAvailability().get("Single"));
-        System.out.println();
+        // Create search service
+        RoomSearchService searchService = new RoomSearchService();
 
-        // Display Double Room
-        System.out.println("Double Room:");
-        doubleRoom.displayRoomDetails();
-        System.out.println("Available Rooms: " +
-                inventory.getRoomAvailability().get("Double"));
-        System.out.println();
-
-        // Display Suite Room
-        System.out.println("Suite Room:");
-        suiteRoom.displayRoomDetails();
-        System.out.println("Available Rooms: " +
-                inventory.getRoomAvailability().get("Suite"));
+        // Perform search (READ-ONLY)
+        searchService.searchAvailableRooms(
+                inventory,
+                singleRoom,
+                doubleRoom,
+                suiteRoom
+        );
     }
 }
