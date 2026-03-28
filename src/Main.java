@@ -1,34 +1,27 @@
-/**
- * MAIN CLASS - UseCase6RoomAllocation
- *
- * @version 6.0
- */
-public class Main {
+public class Main{
 
     public static void main(String[] args) {
 
-        System.out.println("Room Allocation Processing\n");
+        // Create service manager
+        AddonServiceManager manager = new AddonServiceManager();
 
-        // Inventory
-        RoomInventory inventory = new RoomInventory();
+        // Reservation ID
+        String reservationId = "Single-1";
 
-        // Booking queue (UC5)
-        BookingRequestQueue queue = new BookingRequestQueue();
+        // Create services
+        AddonService breakfast = new AddonService("Breakfast", 500);
+        AddonService airportPickup = new AddonService("Airport Pickup", 1000);
 
-        // Add requests
-        queue.addRequest(new Reservation("Abhi", "Single"));
-        queue.addRequest(new Reservation("Subha", "Single"));
-        queue.addRequest(new Reservation("Vanmathi", "Suite"));
+        // Add services to reservation
+        manager.addService(reservationId, breakfast);
+        manager.addService(reservationId, airportPickup);
 
-        // Allocation service
-        RoomAllocationService allocator = new RoomAllocationService();
+        // Calculate total cost
+        double totalCost = manager.calculateTotalServiceCost(reservationId);
 
-        // Process queue (FIFO)
-        while (queue.hasPendingRequests()) {
-
-            Reservation current = queue.getNextRequest();
-
-            allocator.allocateRoom(current, inventory);
-        }
+        // Output
+        System.out.println("Add-On Service Selection");
+        System.out.println("Reservation ID: " + reservationId);
+        System.out.println("Total Add-On Cost: " + totalCost);
     }
 }
