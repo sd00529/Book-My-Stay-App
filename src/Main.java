@@ -1,40 +1,41 @@
-import java.util.*;
-
 public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println("Booking Validation");
-
-        Scanner scanner = new Scanner(System.in);
+        System.out.println("Booking Cancellation & Inventory Rollback");
 
         RoomInventory inventory = new RoomInventory();
-        ReservationValidator validator = new ReservationValidator();
-        BookingRequestQueue bookingQueue = new BookingRequestQueue();
+        BookingHistory history = new BookingHistory();
+        CancellationService cancellationService = new CancellationService();
+
+        // Sample reservation
+        String reservationId = "R101";
+        String roomType = "Single";
+        String roomId = "S1";
 
         try {
-            // Input
-            System.out.print("Enter guest name: ");
-            String guestName = scanner.nextLine();
+            // Before cancellation
+            System.out.println("Available Single Rooms BEFORE: "
+                    + inventory.getAvailableRooms(roomType));
 
-            System.out.print("Enter room type (Single/Double/Suite): ");
-            String roomType = scanner.nextLine();
+            // Perform cancellation
+            cancellationService.cancelBooking(
+                    reservationId,
+                    roomType,
+                    roomId,
+                    inventory,
+                    history
+            );
 
-            // Validation
-            validator.validate(guestName, roomType, inventory);
+            // After cancellation
+            System.out.println("Available Single Rooms AFTER: "
+                    + inventory.getAvailableRooms(roomType));
 
-            // If valid → proceed
-            bookingQueue.addRequest(guestName, roomType);
-
-            System.out.println("Booking request accepted!");
+            // Show rollback stack
+            cancellationService.printRollbackStack();
 
         } catch (InvalidBookingException e) {
-
-            // Graceful failure handling
-            System.out.println("Booking failed: " + e.getMessage());
-
-        } finally {
-            scanner.close();
+            System.out.println("Cancellation failed: " + e.getMessage());
         }
     }
 }
